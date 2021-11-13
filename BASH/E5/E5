@@ -1,0 +1,18 @@
+#!/bin/bash
+#cfccfca8a55b497f9f3c5b22a9cd132a
+function correo(){
+	while IFS= read -r email || [[ -n "$email" ]];
+	do
+		#echo $line
+		echo "correo: "$email
+	        curl -s -A "CloudSavvyIT" \
+       		-H "hibp-api-key:$key" \
+		https://haveibeenpwned.com/api/v3/breachedaccount/$email?truncateResponse=false \
+		| jq -j '.[] | " ", .Title, " [", .Name, "] ", .BreachDate, "\n"'
+		echo "-----------------------------------------------------------------------"
+	done < correos.txt
+	
+}
+echo "Escribe la API key"
+read -r -s key
+correo
